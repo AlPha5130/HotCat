@@ -29,14 +29,14 @@ $(function () {
         })
             (wgULS('不转换', '不轉換'), 'zh')
             ('大陆简体', 'zh-cn')
-            ('台灣正體', 'zh-tw')
+            ('台灣正體', 'zh-tw');
 
         // To preserve normal functionality of spans and buttons in OOUI, make them as a whole
         var $insertBlock = $this.parent('span');
         $('span')
             .css({
                 "border": "1px dashed gray",
-                "whitespace": "nowrap",
+                "white-space": "nowrap",
                 "padding": "10px"
             })
             .text("以")
@@ -54,7 +54,7 @@ $(function () {
                 .replace(/\&variant\=[^\&\?\#]*($|\&)/g, "$1")
                 .replace(/\?variant\=[^\&\?\#]*(?:$|\&)/, "?")
                 .replace(/\?/, "?variant=" + listVariantValue + "&")
-                .replace(/\&/, "")
+                .replace(/\&$/, "")
             );
         });
     });
