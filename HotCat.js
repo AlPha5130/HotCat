@@ -67,7 +67,8 @@ For use with older versions of MediaWiki, use the archived versions below:
 			cancel: '取消',
 			// Localize to wgContentLanguage here; localize to wgUserLanguage in a subpage,
 			// see localization hook below.
-			multi_error: '无法从服务器获取页面内容。您的分类更改将不会保存。',
+			multi_error: '无法从服务器获取页面内容。您的分类更改将不会保存。' +
+			'给您造成的不便敬请谅解。',
 			// Defaults to '[[' + category_canonical + ':$1]]'. Can be overridden if in the short edit summaries
 			// not the standard category name should be used but, say, a shorter namespace alias. $1 is replaced
 			// by a category name.
@@ -185,13 +186,13 @@ For use with older versions of MediaWiki, use the archived versions below:
 		// If false, do not display the "up" and "down" links
 		use_up_down: true,
 		// Default list size
-		listSize: 5,
+		listSize: 10,
 		// If true, single category changes are marked as minor edits. If false, they're not.
 		single_minor: true,
 		// If true, never add a page to the user's watchlist. If false, pages get added to the watchlist if
 		// the user has the "Add pages I edit to my watchlist" or the "Add pages I create to my watchlist"
 		// options in his or her preferences set.
-		dont_add_to_watchlist: true,
+		dont_add_to_watchlist: false,
 		shortcuts: null,
 		addShortcuts: function ( map ) {
 			if ( !map ) return;
@@ -1366,10 +1367,10 @@ For use with older versions of MediaWiki, use the archived versions below:
 						if ( after ) {
 							after.parentNode.insertBefore( span, after.nextSibling );
 							after = after.nextSibling;
-						} else {
+						} else if (line) {
 							line.appendChild( span );
 						}
-					} else if ( line.firstChild ) {
+					} else if ( line && line.firstChild ) {
 						span.appendChild( make( ' ', true ) );
 						line.appendChild( span );
 					}
@@ -1387,7 +1388,11 @@ For use with older versions of MediaWiki, use the archived versions below:
 				if ( is_rtl ) span.dir = 'rtl';
 
 				span.appendChild( this.linkSpan );
-				if ( after ) after.parentNode.insertBefore( span, after.nextSibling ); else line.appendChild( span );
+				if ( after ) {
+					after.parentNode.insertBefore( span, after.nextSibling );
+				} else if ( line ) {
+					line.appendChild( span );
+				}
 
 				this.normalLinks = null;
 				this.undelLink = null;
@@ -1706,7 +1711,7 @@ For use with older versions of MediaWiki, use the archived versions below:
 		},
 
 		display: function ( evt ) {
-			if ( this.isAddCategory && !onUpload ) {
+			if ( this.isAddCategory && !onUpload && this.line ) {
 				// eslint-disable-next-line no-new
 				new CategoryEditor( this.line, null, this.span, true ); // Create a new one
 			}
@@ -1933,7 +1938,7 @@ For use with older versions of MediaWiki, use the archived versions below:
 			this.catLink.title = this.currentKey || '';
 			this.catLink.style.display = '';
 			if ( this.isAddCategory ) {
-				if ( onUpload ) {
+				if ( onUpload && this.line ) {
 					// eslint-disable-next-line no-new
 					new CategoryEditor( this.line, null, this.span, true ); // Create a new one
 				}
@@ -3032,7 +3037,7 @@ For use with older versions of MediaWiki, use the archived versions below:
 			for ( i = 0; i < cats.length; i++ ) copyCats[ i ] = cats[ i ];
 			for ( i = 0; i < copyCats.length; i++ ) {
 				var test = isOnPage( copyCats[ i ] );
-				if ( test !== null && test.match !== null ) {
+				if ( test !== null && test.match !== null && line ) {
 				// eslint-disable-next-line no-new
 					new CategoryEditor( line, copyCats[ i ], test.title, test.match[ 2 ], is_hidden );
 				}
