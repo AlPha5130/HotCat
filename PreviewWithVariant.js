@@ -7,6 +7,7 @@
  * 本工具会在“显示预览”按钮增加菜单，选项为各地区的用字模式。
  * 按下“显示预览”后便会以选择的用字模式来预览编辑。
  */
+'use strict';
 $(function () {
     // find Preview Button
     $('#wpPreview').each(function () {
